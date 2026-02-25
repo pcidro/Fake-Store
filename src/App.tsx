@@ -20,6 +20,7 @@ const App = () => {
   const [produtos, setProdutos] = useState<iProdutos[] | null>(null);
   const [categoriaSelecionada, setCategoriaSelecionada] = useState("");
   const [inputProduct, setInputProduct] = useState("");
+  const [prices, setPrices] = useState("");
 
   const produtosFiltrados = produtos?.filter((produto) => {
     const matchCategoria =
@@ -28,8 +29,19 @@ const App = () => {
     const matchTexto =
       inputProduct === "" ||
       produto.title.toLowerCase().includes(inputProduct.trim().toLowerCase());
-
     return matchCategoria && matchTexto;
+  });
+
+  const produtosOrdenados = [...(produtosFiltrados || [])].sort((a, b) => {
+    if (prices === "low") {
+      return a.price - b.price;
+    }
+
+    if (prices === "high") {
+      return b.price - a.price;
+    }
+
+    return 0;
   });
 
   useEffect(() => {
@@ -103,10 +115,18 @@ const App = () => {
           value={inputProduct}
           onChange={({ target }) => setInputProduct(target.value)}
         />
+        <h3>Order by:</h3>
+        <select id="order" onChange={({ target }) => setPrices(target.value)}>
+          <option disabled value="">
+            Select a option
+          </option>
+          <option value="low">Lowest price</option>
+          <option value="high">Highest price</option>
+        </select>
       </aside>
       <div className="container-geral">
         <ul className="products-container">
-          {produtosFiltrados.map((produto) => (
+          {produtosOrdenados.map((produto) => (
             <li className="product" key={produto.id}>
               <h2>{produto.title}</h2>
               <p className="price">
