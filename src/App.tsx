@@ -21,6 +21,8 @@ const App = () => {
   const [categoriaSelecionada, setCategoriaSelecionada] = useState("");
   const [inputProduct, setInputProduct] = useState("");
   const [prices, setPrices] = useState("");
+  const [paginaAtual, setPaginaAtual] = useState(1);
+  const itensPorPagina = 10;
 
   const produtosFiltrados = produtos?.filter((produto) => {
     const matchCategoria =
@@ -40,9 +42,13 @@ const App = () => {
     if (prices === "high") {
       return b.price - a.price;
     }
-
     return 0;
   });
+
+  const indiceInicial = (paginaAtual - 1) * itensPorPagina;
+  const indiceFinal = paginaAtual * itensPorPagina;
+  const itensAtuais = produtosOrdenados.slice(indiceInicial, indiceFinal);
+  const totalPaginas = Math.ceil(produtosOrdenados.length / itensPorPagina);
 
   useEffect(() => {
     async function getProducts() {
@@ -126,7 +132,7 @@ const App = () => {
       </aside>
       <div className="container-geral">
         <ul className="products-container">
-          {produtosOrdenados.map((produto) => (
+          {itensAtuais.map((produto) => (
             <li className="product" key={produto.id}>
               <h2>{produto.title}</h2>
               <p className="price">
@@ -142,6 +148,23 @@ const App = () => {
             </li>
           ))}
         </ul>
+        <div className="pagination">
+          <button
+            onClick={() => setPaginaAtual((prev) => prev - 1)}
+            disabled={paginaAtual === 1}
+          >
+            Previous
+          </button>
+          <span>
+            Page {paginaAtual} of {totalPaginas}
+          </span>
+          <button
+            onClick={() => setPaginaAtual((prev) => prev + 1)}
+            disabled={paginaAtual === totalPaginas}
+          >
+            Next
+          </button>
+        </div>
       </div>
     </div>
   );

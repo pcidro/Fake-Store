@@ -128,3 +128,46 @@ body {
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
+
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 20px;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.pagination button {
+  background-color: #2563eb;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.pagination button:hover:not(:disabled) {
+  background-color: #1d4ed8;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.pagination button:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.pagination button:disabled {
+  background-color: #e2e8f0;
+  color: #94a3b8;
+  box-shadow: none;
+}
+
+.pagination span {
+  color: #475569;
+  font-size: 0.95rem;
+  font-weight: 500;
+}
