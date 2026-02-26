@@ -56,13 +56,11 @@ const App = () => {
   const totalPaginas = Math.ceil(produtosOrdenados.length / itensPorPagina);
 
   function addtoCart(produtoClicado: iProdutos) {
-    const inCart = itensAtuais.findIndex(
-      (produto) => produto.id === produtoClicado.id,
-    );
+    const inCart = carrinho.find((produto) => produto.id === produtoClicado.id);
     if (!inCart) {
       setCarrinho([...carrinho, { ...produtoClicado, quantidade: 1 }]);
     } else {
-      const newCarrinho = itensAtuais.map((item) => {
+      const newCarrinho = carrinho.map((item) => {
         if (item.id === produtoClicado.id) {
           return { ...item, quantidade: (item.quantidade || 0) + 1 };
         }
@@ -162,58 +160,55 @@ const App = () => {
           <option value="high">Highest price</option>
         </select>
       </aside>
-      <div className="container-geral">
-        <ul className="products-container">
-          {itensAtuais.map((produto) => (
-            <li className="product" key={produto.id}>
-              <h2>{produto.title}</h2>
-              <p className="price">
-                Price:
-                {produto.price.toLocaleString("en-US", {
-                  style: "currency",
-                  currency: "USD",
-                })}{" "}
-                - <span className="category">{produto.category}</span>
-              </p>
-              <p className="description">{produto.description}</p>
-              <img className="product-img" src={produto.image} alt="" />
-              <button
-                onClick={() => addtoCart(produto)}
-                className="button-cart"
-              >
-                <img src={Cart} alt="add to cart" />
-              </button>
-            </li>
-          ))}
-        </ul>
-        <div>
-          <h3>Meu carrinho</h3>
+      <ul className="products-container">
+        {itensAtuais.map((produto) => (
+          <li className="product" key={produto.id}>
+            <h2>{produto.title}</h2>
+            <p className="price">
+              Price:
+              {produto.price.toLocaleString("en-US", {
+                style: "currency",
+                currency: "USD",
+              })}{" "}
+              - <span className="category">{produto.category}</span>
+            </p>
+            <p className="description">{produto.description}</p>
+            <img className="product-img" src={produto.image} alt="" />
+            <button onClick={() => addtoCart(produto)} className="button-cart">
+              <img src={Cart} alt="add to cart" />
+            </button>
+          </li>
+        ))}
+      </ul>
+      {carrinho.length > 0 && (
+        <div className="carrinho-container">
+          <h2 className="carrinho-title">Meu carrinho</h2>
           {carrinho.map((produto) => (
-            <li>
-              <h3>
+            <li key={produto.id}>
+              <h3 className="carrinho">
                 {produto.title} - Quantidade:{produto.quantidade}
               </h3>
               <p>Subtotal: {produto.price * (produto.quantidade || 0)}</p>
             </li>
           ))}
         </div>
-        <div className="pagination">
-          <button
-            onClick={() => setPaginaAtual((prev) => prev - 1)}
-            disabled={paginaAtual === 1}
-          >
-            Previous
-          </button>
-          <span>
-            Page {paginaAtual} of {totalPaginas}
-          </span>
-          <button
-            onClick={() => setPaginaAtual((prev) => prev + 1)}
-            disabled={paginaAtual === totalPaginas}
-          >
-            Next
-          </button>
-        </div>
+      )}
+      <div className="pagination">
+        <button
+          onClick={() => setPaginaAtual((prev) => prev - 1)}
+          disabled={paginaAtual === 1}
+        >
+          Previous
+        </button>
+        <span>
+          Page {paginaAtual} of {totalPaginas}
+        </span>
+        <button
+          onClick={() => setPaginaAtual((prev) => prev + 1)}
+          disabled={paginaAtual === totalPaginas}
+        >
+          Next
+        </button>
       </div>
     </div>
   );
