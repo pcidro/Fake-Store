@@ -26,7 +26,27 @@ const App = () => {
   const [paginaAtual, setPaginaAtual] = useState(1);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [carrinho, setCarrinho] = useState<iProdutos[] | []>([]);
+  const [carrinho, setCarrinho] = useState<iProdutos[]>(() => {
+    const carrinhoString = localStorage.getItem("carrinhoItem");
+    if (!carrinhoString) return [];
+    try {
+      return JSON.parse(carrinhoString) as iProdutos[];
+    } catch (err) {
+      console.log(err);
+      return [];
+    }
+  });
+
+  useEffect(() => {
+    const carrinhoSring = localStorage.getItem("carrinhoItem");
+    if (carrinhoSring) {
+      setCarrinho(JSON.parse(carrinhoSring));
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem("carrinhoItem", JSON.stringify(carrinho));
+  }, [carrinho]);
 
   const produtosFiltrados = produtos?.filter((produto) => {
     const matchCategoria =
