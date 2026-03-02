@@ -90,6 +90,13 @@ const App = () => {
     }
   }
 
+  function removeFromCart(produtoclicado: number) {
+    const newCarrinho = carrinho.filter(
+      (produto) => produto.id !== produtoclicado,
+    );
+    setCarrinho(newCarrinho);
+  }
+
   useEffect(() => {
     async function getProducts() {
       try {
@@ -209,6 +216,7 @@ const App = () => {
                 {produto.title} - Quantidade:{produto.quantidade}
               </h3>
               <p>Subtotal: {produto.price * (produto.quantidade || 0)}</p>
+              <button onClick={() => removeFromCart(produto.id)}>X</button>
             </li>
           ))}
         </div>
